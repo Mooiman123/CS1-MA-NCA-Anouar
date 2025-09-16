@@ -1,26 +1,31 @@
 provider "aws" {
-  region = "eu-central-1"
+  region = var.region
 }
- 
-resource "aws_budgets_budget" "monthly_cost_budget" {
-  name              = "MonthlyCostBudget"
-  budget_type       = "COST"
-  limit_amount      = "10"
-  limit_unit        = "USD"
-  time_unit         = "MONTHLY"
- 
-  # ✅ Cost filter moet een BLOK zijn, geen map
-  cost_filter {
-    name   = "Service"
-    values = ["AmazonEC2"]
-  }
- 
-  notification {
-    comparison_operator        = "GREATER_THAN"
-    notification_type          = "ACTUAL"
-    threshold                  = 80
-    threshold_type             = "PERCENTAGE"
-    subscriber_email_addresses = ["Anouardg@outlook.com"]
-  }
+
+module "network" {
+  source = "./network"
+  region = var.region
 }
- 
+
+module "compute" {
+  source         = "./compute"
+  vpc_id         = module.network.vpc_id
+  alb_sg_id      = module.network.alb_sg_id
+  ec2_sg_id      = module.network.ec2_sg_id
+  public_subnet  = module.network.public_subnet
+  app_subnet     = module.network.app_subnet
+}
+
+module "database" {
+  source       = "./database"
+  vpc_id       = module.network.vpc_id
+  db_subnet    = module.network.db_subnet
+  db_sg_id     = module.network.db_sg_id
+  db_password  = var.db_password
+}
+
+module "monitoring" {
+  source            = "./monitoring"
+  monitoring_subnet = module.network.monitoring_subnet
+  monitoring_sg_id  = module.network.monitoring_sg_id
+}
