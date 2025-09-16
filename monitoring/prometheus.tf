@@ -14,7 +14,3 @@ resource "aws_instance" "prometheus" {
 
   tags = { Name = "prometheus" }
 }
-
-output "prometheus_private_ip" {
-  value = aws_instance.prometheus.private_ip
-}

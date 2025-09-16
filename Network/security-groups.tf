@@ -66,16 +66,3 @@ resource "aws_security_group" "monitoring_sg" {
     cidr_blocks = ["10.0.0.0/16"]
   }
 }
-
-output "alb_sg_id" {
-  value = aws_security_group.alb_sg.id
-}
-output "ec2_sg_id" {
-  value = aws_security_group.ec2_sg.id
-}
-output "db_sg_id" {
-  value = aws_security_group.db_sg.id
-}
-output "monitoring_sg_id" {
-  value = aws_security_group.monitoring_sg.id
-}

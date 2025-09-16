@@ -26,16 +26,3 @@ resource "aws_subnet" "monitoring" {
   availability_zone = "${var.region}a"
   tags = { Name = "monitoring-subnet" }
 }
-
-output "public_subnet" {
-  value = aws_subnet.public.id
-}
-output "app_subnet" {
-  value = aws_subnet.app.id
-}
-output "db_subnet" {
-  value = aws_subnet.db.id
-}
-output "monitoring_subnet" {
-  value = aws_subnet.monitoring.id
-}
