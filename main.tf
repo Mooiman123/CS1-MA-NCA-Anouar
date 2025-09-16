@@ -19,12 +19,12 @@ module "network" {
 }
 
 module "compute" {
-  source         = "./compute"
-  vpc_id         = module.network.vpc_id
-  alb_sg_id      = module.network.alb_sg_id
-  ec2_sg_id      = module.network.ec2_sg_id
-  public_subnet  = module.network.public_subnet
-  app_subnet     = module.network.app_subnet
+  source        = "./compute"
+  vpc_id        = module.network.vpc_id
+  alb_sg_id     = module.network.alb_sg_id
+  ec2_sg_id     = module.network.ec2_sg_id
+  public_subnet = module.network.public_subnet
+  app_subnet    = module.network.app_subnet
 }
 
 module "database" {
