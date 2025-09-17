@@ -15,6 +15,6 @@ resource "aws_security_group" "db_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-}
 
-output "db_sg_id" { value = aws_security_group.db_sg.id }
+  tags = { Name = "db-sg" }
+}
