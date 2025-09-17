@@ -1,2 +1,4 @@
-variable "region" {}
-variable "db_password" {}
+variable "region" {
+  description = "AWS region"
+  default     = "eu-central-1"
+}

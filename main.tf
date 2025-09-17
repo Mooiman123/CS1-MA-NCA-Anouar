@@ -1,6 +1,5 @@
 terraform {
   required_version = ">= 1.5.0"
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -16,12 +15,4 @@ provider "aws" {
 module "network" {
   source = "./network"
   region = var.region
-}
-
-module "database" {
-  source    = "./database"
-  vpc_id    = module.network.vpc_id
-  db_subnet = module.network.db_subnet
-  db_sg_id  = module.network.db_sg_id
-  db_password = var.db_password
 }
