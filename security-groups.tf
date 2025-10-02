@@ -18,7 +18,7 @@ resource "aws_security_group" "dmz_app_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]  # Alleen van VPC (VPN verwijderd)
+    cidr_blocks = ["10.0.0.0/16"] # Alleen van VPC (VPN verwijderd)
     description = "SSH access from VPC only"
   }
 
@@ -137,7 +137,7 @@ resource "aws_security_group" "monitoring_sg" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = ["10.8.0.0/24", "10.0.0.0/16"]  # VPN clients + VPC
+    cidr_blocks = ["10.8.0.0/24", "10.0.0.0/16"] # VPN clients + VPC
     description = "Grafana access from VPN and VPC"
   }
 
@@ -146,7 +146,7 @@ resource "aws_security_group" "monitoring_sg" {
     from_port   = 9090
     to_port     = 9090
     protocol    = "tcp"
-    cidr_blocks = ["10.8.0.0/24", "10.0.0.0/16"]  # VPN clients + VPC
+    cidr_blocks = ["10.8.0.0/24", "10.0.0.0/16"] # VPN clients + VPC
     description = "Prometheus access from VPN and VPC"
   }
 

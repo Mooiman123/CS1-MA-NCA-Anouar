@@ -13,7 +13,7 @@ variable "vpc_cidr" {
 variable "key_pair_name" {
   description = "The name of the existing EC2 key pair to use"
   type        = string
-  default     = "ec2_anouar"  # Aangepast naar jouw key name
+  default     = "ec2_anouar" # Aangepast naar jouw key name
 }
 
 variable "instance_type" {
@@ -32,7 +32,7 @@ variable "db_password" {
 variable "volume_type" {
   description = "Type of EBS volume"
   type        = string
-  default     = "gp3"  # of "gp2"
+  default     = "gp3" # of "gp2"
 }
 
 variable "volume_size" {

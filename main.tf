@@ -33,7 +33,7 @@ resource "aws_eip" "nat" {
 # NAT Gateway - VERVANGT DE NAT INSTANCE
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public_a.id  # MOET in public subnet!
+  subnet_id     = aws_subnet.public_a.id # MOET in public subnet!
 
   tags = {
     Name = "nat-gateway"

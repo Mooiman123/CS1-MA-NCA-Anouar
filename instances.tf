@@ -1,10 +1,10 @@
 # App Servers (2 instances)
 resource "aws_instance" "app" {
-  count         = 2
-  ami           = "ami-01592cddfc61fba84"  # Amazon Linux 2
-  instance_type = var.instance_type
-  subnet_id     = element([aws_subnet.dmz_a.id, aws_subnet.dmz_b.id], count.index)
-  key_name      = var.key_pair_name
+  count                  = 2
+  ami                    = "ami-01592cddfc61fba84" # Amazon Linux 2
+  instance_type          = var.instance_type
+  subnet_id              = element([aws_subnet.dmz_a.id, aws_subnet.dmz_b.id], count.index)
+  key_name               = var.key_pair_name
   vpc_security_group_ids = [aws_security_group.dmz_app_sg.id]
 
   root_block_device {
@@ -69,16 +69,16 @@ resource "aws_instance" "app" {
     Name = "app-${count.index + 1}"
   }
 
-  depends_on = [aws_db_instance.main, aws_nat_gateway.main]  # 👈 NAT GATEWAY TOEGEVOEGD
+  depends_on = [aws_db_instance.main, aws_nat_gateway.main] # 👈 NAT GATEWAY TOEGEVOEGD
 }
 
 # VPN Server - DEFINITIEF WERKENDE VERSIE
 resource "aws_instance" "vpn" {
-  ami                    = "ami-01592cddfc61fba84"
-  instance_type          = "t3.micro"
-  subnet_id              = aws_subnet.public_a.id
-  key_name               = var.key_pair_name
-  vpc_security_group_ids = [aws_security_group.vpn_sg.id]
+  ami                         = "ami-01592cddfc61fba84"
+  instance_type               = "t3.micro"
+  subnet_id                   = aws_subnet.public_a.id
+  key_name                    = var.key_pair_name
+  vpc_security_group_ids      = [aws_security_group.vpn_sg.id]
   associate_public_ip_address = true
 
   root_block_device {
@@ -183,11 +183,11 @@ resource "aws_instance" "vpn" {
 
 # Monitoring Server - 100% WERKENDE VERSIE
 resource "aws_instance" "monitoring" {
-  ami                    = "ami-01592cddfc61fba84"
-  instance_type          = "t3.medium"
-  subnet_id              = aws_subnet.monitoring.id
-  key_name               = var.key_pair_name
-  vpc_security_group_ids = [aws_security_group.monitoring_sg.id]
+  ami                         = "ami-01592cddfc61fba84"
+  instance_type               = "t3.medium"
+  subnet_id                   = aws_subnet.monitoring.id
+  key_name                    = var.key_pair_name
+  vpc_security_group_ids      = [aws_security_group.monitoring_sg.id]
   associate_public_ip_address = false
 
   root_block_device {
@@ -253,5 +253,5 @@ resource "aws_instance" "monitoring" {
     Name = "monitoring-server"
   }
 
-  depends_on = [aws_nat_gateway.main]  # 👈 NAT GATEWAY TOEGEVOEGD
+  depends_on = [aws_nat_gateway.main] # 👈 NAT GATEWAY TOEGEVOEGD
 }
