@@ -1,33 +1,43 @@
 terraform {
-  required_version = ">= 1.5.0"
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
+
+  required_version = ">= 1.0"
 }
 
 provider "aws" {
   region = var.region
+
+  default_tags {
+    tags = {
+      Project     = "CS1-MA-NCA-Anouar"
+      Environment = "production"
+      Owner       = "Anouar"
+    }
+  }
 }
 
-module "network" {
-  source = "./network"
+# Elastic IP voor NAT Gateway
+resource "aws_eip" "nat" {
+  domain = "vpc"
+
+  tags = {
+    Name = "nat-eip"
+  }
 }
 
-module "compute" {
-  source           = "./compute"
-  vpc_id           = module.network.vpc_id
-  public_subnet_a  = module.network.public_a_subnet
-  public_subnet_b  = module.network.public_b_subnet
-  ec2_sg_id        = module.network.ec2_sg_id
-  alb_sg_id        = module.network.alb_sg_id
-}
+# NAT Gateway - VERVANGT DE NAT INSTANCE
+resource "aws_nat_gateway" "main" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.public_a.id  # MOET in public subnet!
 
-module "dns" {
-  source       = "./dns"
-  alb_dns_name = module.compute.alb_dns_name
-  alb_zone_id  = module.compute.alb_zone_id
+  tags = {
+    Name = "nat-gateway"
+  }
+
+  depends_on = [aws_internet_gateway.igw]
 }
