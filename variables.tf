@@ -10,29 +10,16 @@ variable "vpc_cidr" {
   default     = "10.0.0.0/16"
 }
 
-variable "key_pair_name" {
-  description = "The name of the existing EC2 key pair to use"
-  type        = string
-  default     = "ec2_anouar" # Aangepast naar jouw key name
-}
-
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
   default     = "t3.micro"
 }
 
-variable "db_password" {
-  description = "Database password"
-  type        = string
-  sensitive   = true
-  default     = "SuperVeiligWachtwoord123!"
-}
-
 variable "volume_type" {
   description = "Type of EBS volume"
   type        = string
-  default     = "gp3" # of "gp2"
+  default     = "gp3"
 }
 
 variable "volume_size" {
@@ -41,18 +28,35 @@ variable "volume_size" {
   default     = 8
 }
 
-# Amazon Linux 2 AMI - WERKT ZEKER MET t3.micro
-data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
+variable "DB_USERNAME" {
+  description = "Database username"
+  type        = string
+  sensitive   = true
+}
 
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
+variable "DB_PASSWORD" {
+  description = "Database password"
+  type        = string
+  sensitive   = true
+}
 
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]
-  }
+variable "GRAFANA_ADMIN_PASSWORD" {
+  description = "Grafana admin password"
+  type        = string
+  sensitive   = true
+}
+
+variable "KEY_PAIR_NAME" {
+  description = "AWS Key Pair name"
+  type        = string
+}
+
+variable "OPENVPN_AMI" {
+  description = "AMI ID for OpenVPN server"
+  type        = string
+}
+
+variable "WEBSERVER_AMI" {
+  description = "AMI ID for web servers"
+  type        = string
 }

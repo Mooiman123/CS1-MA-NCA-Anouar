@@ -1,10 +1,10 @@
 # App Servers (2 instances)
 resource "aws_instance" "app" {
   count                  = 2
-  ami                    = "ami-01592cddfc61fba84" # Amazon Linux 2
+  ami                    = var.WEBSERVER_AMI
   instance_type          = var.instance_type
   subnet_id              = element([aws_subnet.dmz_a.id, aws_subnet.dmz_b.id], count.index)
-  key_name               = var.key_pair_name
+  key_name               = var.KEY_PAIR_NAME
   vpc_security_group_ids = [aws_security_group.dmz_app_sg.id]
 
   root_block_device {
@@ -53,7 +53,7 @@ resource "aws_instance" "app" {
               echo '<p>Server: ' . gethostname() . '</p>';
               echo '<p>Server time: ' . date('Y-m-d H:i:s') . '</p>';
 
-              \$link = mysqli_connect('${aws_db_instance.main.endpoint}', 'admin', '${var.db_password}');
+              \$link = mysqli_connect('${aws_db_instance.main.endpoint}', '${var.DB_USERNAME}', '${var.DB_PASSWORD}');
               if (!\$link) {
               echo '<p style=\"color: red;\">Database connection failed: ' . mysqli_connect_error() . '</p>';
               } else {
@@ -74,10 +74,10 @@ resource "aws_instance" "app" {
 
 # VPN Server - DEFINITIEF WERKENDE VERSIE
 resource "aws_instance" "vpn" {
-  ami                         = "ami-01592cddfc61fba84"
+  ami                         = var.OPENVPN_AMI
   instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.public_a.id
-  key_name                    = var.key_pair_name
+  key_name                    = var.KEY_PAIR_NAME
   vpc_security_group_ids      = [aws_security_group.vpn_sg.id]
   associate_public_ip_address = true
 
@@ -183,10 +183,10 @@ resource "aws_instance" "vpn" {
 
 # Monitoring Server - 100% WERKENDE VERSIE
 resource "aws_instance" "monitoring" {
-  ami                         = "ami-01592cddfc61fba84"
+  ami                         = var.WEBSERVER_AMI
   instance_type               = "t3.medium"
   subnet_id                   = aws_subnet.monitoring.id
-  key_name                    = var.key_pair_name
+  key_name                    = var.KEY_PAIR_NAME
   vpc_security_group_ids      = [aws_security_group.monitoring_sg.id]
   associate_public_ip_address = false
 
@@ -240,9 +240,10 @@ resource "aws_instance" "monitoring" {
                 --name prometheus \\
                 prom/prometheus
 
-              # Start Grafana container
+              # Start Grafana container met admin password
               docker run -d \\
                 -p 3000:3000 \\
+                -e "GF_SECURITY_ADMIN_PASSWORD=${var.GRAFANA_ADMIN_PASSWORD}" \\
                 --name grafana \\
                 grafana/grafana
 
