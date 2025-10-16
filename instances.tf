@@ -243,7 +243,6 @@ resource "aws_instance" "monitoring" {
               # Start Grafana container met admin password
               docker run -d \\
                 -p 3000:3000 \\
-                -e "GF_SECURITY_ADMIN_PASSWORD=${var.GRAFANA_ADMIN_PASSWORD}" \\
                 --name grafana \\
                 grafana/grafana
 

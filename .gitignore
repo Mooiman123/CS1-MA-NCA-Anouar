@@ -1,4 +1,6 @@
 terraform.tfstate
 terraform.tfstate.backup
 terraform.tfstate.*
+client.ovpn
+vpn-client.ovpn
 .terraform/
